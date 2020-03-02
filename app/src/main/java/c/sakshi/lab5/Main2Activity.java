@@ -3,7 +3,9 @@ package c.sakshi.lab5;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,14 +17,16 @@ public class Main2Activity extends AppCompatActivity {
 
     TextView textview;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SharedPreferences savedUser = getSharedPreferences("c.sakshi.lab5", Context.MODE_PRIVATE);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
 
         textview = (TextView) findViewById(R.id.welcomeMess);
-        Intent intent = getIntent();
-        textview.setText("Welcome, " + intent.getStringExtra("user"));
+        textview.setText("Welcome, " + savedUser.getString("username", ""));
     }
 
     @Override
@@ -36,10 +40,13 @@ public class Main2Activity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item)
     {
+        SharedPreferences savedUser = getSharedPreferences("c.sakshi.lab5", Context.MODE_PRIVATE);
+
         switch (item.getItemId())
         {
             case R.id.logout:
                 Intent intent = new Intent(this, MainActivity.class);
+                savedUser.edit().remove("username").apply();
                 startActivity(intent);
                 return true;
             case R.id.addnote:
